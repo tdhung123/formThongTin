@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Form</title>
+    <style>
+      .btn1.btn-primary1 {
+    font-size: 16px;
+    background-color: #fff;
+    font-weight: 600;
+    color: green;
+    border-radius: 30px;
+    min-width: 148px;
+    text-align: center;
+    border: 2px solid green;
+    line-height: 1.6;
+    cursor: pointer;
+    transition: all .25s ease-in;
+    position: relative;
+    /*width: 25%;*/
+    left: calc(100% - 216px);
+    margin: 10px;
+}
+.btn1.btn-primary1:hover {
+    background-color: green;
+    color: #fff;
+    border: 2px solid #222;
+}
+    </style>
+</head>
+<body>
+      <!-- Start form -->
+    <div class="container">
+        <h2>Form thông tin</h2>
+        <div class="row">
+        <form id="thongTin" >       
+          <div class="row mb-3">
+            <label for="soDienThoai" class="col-sm-2 col-form-label">Số điện thoại:</label>
+            <div class="col-sm-10">
+              <input type="text" id="soDienThoai" name="soDienThoai"  class="form-control" required />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="email" class="col-sm-2 col-form-label">Email:</label>
+            <div class="col-sm-10">
+              <input type="text" id="email" name="email"  class="form-control" required />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="tinhThanhPho" class="col-sm-2 col-form-label">Tỉnh / thành phố</label>
+            <div class="col-sm-10">
+              <select id="tinhThanhPho" name="tinhThanhPho"  class="form-control" required>
+                <option value="">-- Chọn tỉnh / thành phố --</option>
+                <option value="haNoi"> Hà Nội </option>
+                <option value="hoChiMinh"> Hồ Chí Minh </option>
+                <option value="namDinh">Nam Định</option> 
+            </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="quanHuyen" class="col-sm-2 col-form-label">Quận / huyện</label>
+            <div class="col-sm-10">
+              <select id="quanHuyen" name="quanHuyen"  class="form-control" required>
+                <option  value="">-- Chọn tỉnh thành phố trước --</option>
+            </select>
+            </div>
+          </div>
+            <button type="submit" class="btn1 btn-primary1">Thêm</button>
+          </form>
+          <div id="hienThiDuLieu">
+            <input type="hidden" id="hienThiTinhThanhPho"></input>
+          </div>
+        </div>
+    </div>
+       <!-- End form -->
+      <script>
+          // Nhập thông tin quận huyện
+          const chuoiQuanHuyen = {
+            haNoi: ["Hoàn Kiếm", "Đống Đa", "Ba Đình", "Hai Bà Trưng", 
+              "Hoàng Mai", "Thanh Xuân", "Long Biên", "Nam Từ Liêm", "Bắc Từ Liêm", 
+              "Tây Hồ", "Cầu Giấy", "Hà Đông"],
+            hoChiMinh: ["Thủ Đức", "Quận 1", "Quận 2", "Quận 3","Quận 4","Quận 5",
+              "Quận 6","Quận 7", "Quận 8", "Quận 9", "Quận 10", "Quận 11", "Quận 12", "Quận Bình Tân",
+              "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình", "Quận Tân Phú", "Huyện Bình Chánh",
+              "Huyện Cần Giờ", "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Nhà Bè"],
+            namDinh: ["Giao Thuỷ", "Trực Ninh", "Hải Hậu", "Vụ Bản", "Mỹ Lộc", 
+              "Xuân Trường", "Nam Trực", "Ý Yên", "Nghĩa Hưng", "Thành phố Nam Định"]
+          };
+          // Ánh xạ giá trị  
+          const tenTinhThanhPho = {
+            haNoi: "Hà Nội",
+            hoChiMinh: "Hồ Chí Minh",
+            namDinh: "Nam Định"
+          };
+
+          // Lấy thông tin  thành phố ; quận huyện     
+          const thongTinThanhPho = document.getElementById("tinhThanhPho")
+          const thongTinQuanHuyen = document.getElementById("quanHuyen")
+          const hienThiTinhThanhPho = document.getElementById("hienThiTinhThanhPho")
+          // Bắt sự kiện tìm quận/ huyện tương ứng tới tỉnh/ thành phố
+          thongTinThanhPho.addEventListener("change", function () {
+          const chonTinhThanhPho = thongTinThanhPho.value;
+          const chonQuanHuyen = chuoiQuanHuyen[chonTinhThanhPho] ;
+          // Xoá các option trước đó
+          thongTinQuanHuyen.innerHTML = ""   
+          // Cập nhật thông tin tỉnh/thành phố đã chọn
+          hienThiTinhThanhPho.textContent =  tenTinhThanhPho[chonTinhThanhPho];
+          // Chạy vòng lặp hiển thị thông tin quận huyện theo tỉnh thành phố
+          chonQuanHuyen.forEach(quanHuyen => {
+          const luaChon = document.createElement("option");
+          luaChon.value = quanHuyen
+          luaChon.textContent = quanHuyen
+          thongTinQuanHuyen.appendChild(luaChon)
+    });
+  }); 
+
+            
+
+          //Hiển thị thông tin form
+          const cacThongTin = document.getElementById("thongTin")
+          const hienThiThongTinDuLieu = document.getElementById("hienThiDuLieu")
+
+          cacThongTin.addEventListener("submit",function(e){
+            e.preventDefault()
+            const duLieuThongTin = new FormData(this)
+            const nhanThongTin={}
+            duLieuThongTin.forEach((value,key)=>{
+              nhanThongTin[key] =value;
+            });
+          
+            hienThiThongTinDuLieu.innerHTML = `
+            <h3>Thông tin bao gồm:</h3>
+                <p>Số điện thoại: ${nhanThongTin.soDienThoai}</p>
+                <p>Email: ${nhanThongTin.email}</p>
+                <p>Tỉnh / Thành phố: ${hienThiTinhThanhPho.textContent}</p>
+                <p>Quận / Huyện: ${nhanThongTin.quanHuyen}</p>      `       
+          
+            
+          });
+
+
+      </script>
+</body>
+</html>
